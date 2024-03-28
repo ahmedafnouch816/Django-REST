@@ -7,7 +7,7 @@ class ProductSerializers(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields =  ('pk','name', 'prix' , 'content' ,'my_discount')
-        
+        #extra_kwargs = {'content': {'required': False, 'allow_blank': True}}
     
     def get_my_discount(self, obj):
         if not hasattr(obj, 'id'):
