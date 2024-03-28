@@ -14,7 +14,7 @@ class DetailApiView(generics.RetrieveAPIView):
     serializer_class = ProductSerializers
 
 
-class CreateApiView(generics.CreateAPIView):
+class CreateApiView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
     
@@ -45,4 +45,13 @@ class DeleteProductView(generics.DestroyAPIView):
     
     def perform_destroy(self, instance):
         instance.delete()
+    
+    
+class ListProductView(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializers
+    
+    def get_queryset(self):
+        return super().get_queryset().filter(name__icontains = 'past')
+    
     
