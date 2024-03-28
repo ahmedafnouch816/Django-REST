@@ -24,3 +24,14 @@ class CreateApiView(generics.CreateAPIView):
         if content is None:
             content = name
         serializer.save(content=content)
+        
+class UpdateApiView(generics.UpdateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializers
+    
+    def perform_update(self, serializer):
+        name = serializer.validated_data.get('name')
+        content = serializer.validated_data.get('content') or None
+        if content is None:
+            content = name
+        serializer.save(content=content)
