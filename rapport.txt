@@ -1,0 +1,6 @@
+header
+params 
+post 
+get 
+request 
+how to recupere data 
