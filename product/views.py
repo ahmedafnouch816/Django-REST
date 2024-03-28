@@ -35,3 +35,14 @@ class UpdateApiView(generics.UpdateAPIView):
         if content is None:
             content = name
         serializer.save(content=content)
+        
+        
+class DeleteProductView(generics.DestroyAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializers
+    
+    lookup_field = 'pk'
+    
+    def perform_destroy(self, instance):
+        instance.delete()
+    
