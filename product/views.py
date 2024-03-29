@@ -6,7 +6,7 @@ from django.forms.models import model_to_dict
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .serializer import ProductSerializers
-from rest_framework import generics, mixins
+from rest_framework import generics, mixins, permissions, authentication
 
 
 
@@ -16,10 +16,11 @@ class DetailApiView(generics.RetrieveAPIView):
     serializer_class = ProductSerializers
 
 
-class CreateApiView(generics.CreateAPIView):
+class ListCreateApiView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
-    
+    authentication_classes = [authentication.SessionAuthentication]
+    permission_classes =  [permissions.IsAuthenticatedOrReadOnly]
     def perform_create(self, serializer):
         name = serializer.validated_data.get('name')
         content = serializer.validated_data.get('content') or None
@@ -101,6 +102,9 @@ class ProductMixinsViews(generics.GenericAPIView,
     
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
+    
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
 
     
     
