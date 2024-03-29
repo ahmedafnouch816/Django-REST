@@ -6,7 +6,9 @@ from django.forms.models import model_to_dict
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .serializer import ProductSerializers
-from rest_framework import generics
+from rest_framework import generics, mixins
+
+
 
 
 class DetailApiView(generics.RetrieveAPIView):
@@ -14,7 +16,7 @@ class DetailApiView(generics.RetrieveAPIView):
     serializer_class = ProductSerializers
 
 
-class CreateApiView(generics.ListCreateAPIView):
+class CreateApiView(generics.CreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
     
@@ -53,5 +55,55 @@ class ListProductView(generics.ListAPIView):
     
     def get_queryset(self):
         return super().get_queryset().filter(name__icontains = 'past')
+    
+    
+    
+
+class ProductMixinsViews(generics.GenericAPIView,
+                         mixins.CreateModelMixin, 
+                         mixins.UpdateModelMixin,
+                         mixins.ListModelMixin,
+                         mixins.DestroyModelMixin,
+                         mixins.RetrieveModelMixin
+                         ):
+    
+    
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializers
+    lookup_field = 'pk'
+    
+    def perform_create(self, serializer):
+        name = serializer.validated_data.get('name')
+        content = serializer.validated_data.get('content') or None
+        if content is None:
+            content = name
+        serializer.save(content=content)
+        
+    def perform_update(self, serializer):
+        name = serializer.validated_data.get('name')
+        content = serializer.validated_data.get('content') or None
+        if content is None:
+            content = name
+        serializer.save(content=content)
+        
+        
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        if pk is not None:
+            return self.retrieve(request, *args, **kwargs)
+        return self.list(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+    
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+    
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    
+    
+    
     
     
