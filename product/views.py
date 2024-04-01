@@ -19,7 +19,7 @@ class DetailApiView(generics.RetrieveAPIView):
 class ListCreateApiView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
-    authentication_classes = [authentication.SessionAuthentication , authentication.TokenAuthentication , TokenAuthentication]
+    #authentication_classes = [authentication.SessionAuthentication , TokenAuthentication]
     permission_classes =  [permissions.IsAdminUser,IsStaffPermission] #verifiy que utilisateur est un  admin un user 
     def perform_create(self, serializer):
         name = serializer.validated_data.get('name')
