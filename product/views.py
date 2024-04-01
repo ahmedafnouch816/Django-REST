@@ -9,7 +9,7 @@ from .serializer import ProductSerializers
 from rest_framework import generics, mixins, permissions, authentication
 
 
-
+from .permissions import IsStaffPermission 
 
 class DetailApiView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
@@ -19,8 +19,8 @@ class DetailApiView(generics.RetrieveAPIView):
 class ListCreateApiView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
-    authentication_classes = [authentication.SessionAuthentication]
-    permission_classes =  [permissions.DjangoModelPermissions]
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes =  [permissions.IsAdminUser,IsStaffPermission] #verifiy que utilisateur est un  admin un user 
     def perform_create(self, serializer):
         name = serializer.validated_data.get('name')
         content = serializer.validated_data.get('content') or None
