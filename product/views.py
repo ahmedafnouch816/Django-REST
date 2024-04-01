@@ -9,17 +9,17 @@ from .serializer import ProductSerializers
 from rest_framework import generics, mixins, permissions, authentication
 
 
-from .permissions import IsStaffPermission 
+from .permissions import IsStaffPermission
+from .authentication import TokenAuthentication
 
 class DetailApiView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
 
-
 class ListCreateApiView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
-    authentication_classes = [authentication.TokenAuthentication]
+    authentication_classes = [authentication.SessionAuthentication , authentication.TokenAuthentication , TokenAuthentication]
     permission_classes =  [permissions.IsAdminUser,IsStaffPermission] #verifiy que utilisateur est un  admin un user 
     def perform_create(self, serializer):
         name = serializer.validated_data.get('name')
