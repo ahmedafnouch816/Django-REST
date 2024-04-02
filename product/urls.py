@@ -9,8 +9,8 @@ urlpatterns = [
     #path("list/", ListProductView.as_view()),
 #
     path("create-list/", ListCreateApiView.as_view()),
-    path("<int:pk>/detail", ProductMixinsViews.as_view()),
-    path("<int:pk>/detail", ProductMixinsViews.as_view()),
+    path("<int:pk>/detail", ProductMixinsViews.as_view(), name='product-detail'),
+    path("<int:pk>/detail", ProductMixinsViews.as_view(), name='product-update'),
     path("<int:pk>/update", ProductMixinsViews.as_view()),
     path("<int:pk>/delete", ProductMixinsViews.as_view()),
     path("list/", ProductMixinsViews.as_view()),
