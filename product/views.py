@@ -28,9 +28,9 @@ class ListCreateApiView(
     generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
-    #authentication_classes = [authentication.SessionAuthentication , TokenAuthentication]
-    #permission_classes =  [permissions.IsAdminUser,IsStaffPermission] #verifiy que utilisateur est un  admin un user 
     def perform_create(self, serializer):
+        email = serializer.validated_data.pop('email')
+        print(email)
         name = serializer.validated_data.get('name')
         content = serializer.validated_data.get('content') or None
         if content is None:
